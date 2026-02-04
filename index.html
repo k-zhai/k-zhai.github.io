@@ -9,6 +9,7 @@
         :root {
             --primary-color: #2c3e50;
             --accent-color: #3498db;
+            --success-color: #27ae60; /* Green for Acceptance */
             --text-color: #333;
             --bg-color: #fff;
             --gray: #666;
@@ -66,11 +67,26 @@
         }
 
         /* Publications */
-        .paper { margin-bottom: 25px; }
-        .paper-title { font-weight: bold; font-size: 1.05rem; display: block; }
-        .authors { color: var(--gray); font-size: 0.95rem; }
-        .venue { font-style: italic; color: var(--primary-color); font-size: 0.95rem; }
-        .highlight { background-color: #eef6fc; padding: 2px 5px; border-radius: 4px; }
+        .paper { margin-bottom: 30px; }
+        .paper-title { font-weight: bold; font-size: 1.05rem; display: block; color: var(--primary-color); }
+        .authors { color: var(--gray); font-size: 0.95rem; margin-bottom: 2px; }
+        .venue { font-style: italic; color: var(--gray); font-size: 0.95rem; }
+        
+        /* New Style for Descriptions */
+        .paper-desc {
+            font-size: 0.95rem;
+            color: #444;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            line-height: 1.5;
+        }
+
+        /* Acceptance Pop */
+        .venue.accepted {
+            color: var(--success-color);
+            font-weight: 800;
+            font-style: normal;
+        }
 
         /* Experience */
         .job { margin-bottom: 20px; }
@@ -102,7 +118,7 @@
         <h2>About</h2>
         <p>
             I am a Ph.D. student in Computer Science at the <strong>University of Central Florida (Institute of Artificial Intelligence)</strong>, advised by <a href="#">Dr. Mubarak Shah</a>. 
-            My research focuses on <strong>generative modeling</strong>, specifically specializing in inference-time alignment, safety, and personalization for diffusion models and diffusion-LLMs.
+            My research focuses on <strong>inference-time scaling</strong> and alignment for generative models. I specialize in developing training-free methods to enhance the safety, consistency, and personalization of Diffusion Models and Diffusion-LLMs.
         </p>
         <p>
             Previously, I worked as a Computer Engineer building simulation systems. I hold a B.Sc. in Computer Science, Physics, and Mathematics (Triple Major) from Vanderbilt University.
@@ -113,13 +129,30 @@
         <h2>Selected Manuscripts</h2>
         
         <div class="paper">
+            <span class="paper-title">Test-Time Scaling in Diffusion LLMs via Hidden Semi-Autoregressive Experts</span>
+            <div class="authors">J. Lee, H. Moon, <strong>K. Zhai</strong>, A.K. Chithanar, A.K. Sahu, S. Kar, C. Lee, S. Chakraborty, A.S. Bedi</div>
+            <div class="venue accepted">[ACCEPTED] ICLR 2026</div>
+            <div class="paper-desc">
+                Proposing a training-free inference scaling method (HEX) that outperforms fine-tuned baselines by leveraging hidden semi-autoregressive experts.
+            </div>
+            <div class="links">
+                <a href="https://arxiv.org/abs/2510.05040">[PDF]</a>
+                <a href="https://github.com/junos-ai-org/Test-Time-Scaling/tree/main">[Code]</a>
+                <a href="https://junos-ai-org.github.io/Test-Time-Scaling/">[Project Page]</a>
+            </div>
+        </div>
+
+        <div class="paper">
             <span class="paper-title">Mitigating Reward Hacking in Inference-Time Noise Optimization for Text-to-Image Diffusion Models</span>
             <div class="authors"><strong>K. Zhai</strong>, U. Singh, A. Thatipelli, S. Chakraborty, A.K. Sahu, F. Huang, A.S. Bedi, M. Shah</div>
             <div class="venue">Submitted to ICML 2026</div>
-            <!-- <div class="links">
-                <a href="https://arxiv.org/abs/2510.01549">[PDF]</a>
-            </div> -->
         </div>
+
+        <div class="paper">
+            <span class="paper-title">CoRe: Context-Robust Remasking for Diffusion Language Models</span>
+            <div class="authors"><strong>K. Zhai</strong>, S. Mollah, Z. Wang, M. Shah</div>
+            <div class="venue">Submitted to ICML 2026</div>
+            </div>
 
         <div class="paper">
             <span class="paper-title">Consensus-to-Personal: Inference-Time Alignment for Text-to-Image Personalization</span>
@@ -133,16 +166,6 @@
             <div class="venue">Submitted to ICML 2026</div>
         </div>
 
-        <div class="paper">
-            <span class="paper-title">Test-Time Scaling in Diffusion LLMs via Hidden Semi-Autoregressive Experts</span>
-            <div class="authors">J. Lee, H. Moon, <strong>K. Zhai</strong>, A.K. Chithanar, A.K. Sahu, S. Kar, C. Lee, S. Chakraborty, A.S. Bedi</div>
-            <div class="venue">Published at ICLR 2026</div>
-            <div class="links">
-                <a href="https://arxiv.org/abs/2510.05040">[PDF]</a>
-                <a href="https://github.com/junos-ai-org/Test-Time-Scaling/tree/main">[Code]</a>
-                <a href="https://junos-ai-org.github.io/Test-Time-Scaling/">[Project Page]</a>
-            </div>
-        </div>
     </section>
 
     <section id="experience">
