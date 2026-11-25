@@ -78,19 +78,6 @@
             <tr data-result="dream-daedal"><th scope="row">+ DAEDAL</th><td>34.7</td><td>54.4</td><td>74.3</td><td>38.6</td><td>44.8</td></tr>
             <tr class="ours" data-result="dream-dystruct"><th scope="row">+ DyStruct</th><td>47.0</td><td>59.8</td><td>75.1</td><td>38.8</td><td>52.5</td></tr>
           </tbody></table></div>
-    <details class="evaluation-details"><summary>Evaluation settings and uncertainty</summary><div>
-          <p>HumanEval and MBPP report greedy pass@1; GSM8K and MATH use strict match; BBH uses exact match. The few-shot counts, in that order, are 0, 3, 5, 4, and 3.</p>
-          <p>Generation is capped at 256 tokens with a base budget of 256 unmasking iterations. Experiments use a single NVIDIA H100 GPU.</p>
-          <p>Backbone weights remain frozen. Diagnostic coefficients are calibrated on validation trajectories with ground-truth sequences.</p>
-          <div class="table-scroll" role="region" aria-label="Reported standard errors" tabindex="0"><table id="standard-errors"><caption>Reported standard errors, in score percentage points</caption><thead><tr><th scope="col">Backbone / decoder</th><th scope="col">HumanEval</th><th scope="col">MBPP</th><th scope="col">GSM8K</th><th scope="col">MATH</th><th scope="col">BBH</th></tr></thead><tbody>
-            <tr data-se="llada-base"><th scope="row">LLaDA Base</th><td>3.6</td><td>2.1</td><td>1.2</td><td>0.6</td><td>0.5</td></tr>
-            <tr data-se="llada-daedal"><th scope="row">LLaDA + DAEDAL</th><td>3.7</td><td>2.1</td><td>1.2</td><td>0.6</td><td>0.5</td></tr>
-            <tr data-se="llada-dystruct"><th scope="row">LLaDA + DyStruct</th><td>3.7</td><td>2.2</td><td>1.2</td><td>0.6</td><td>0.5</td></tr>
-            <tr data-se="dream-base"><th scope="row">Dream Base</th><td>2.7</td><td>2.2</td><td>1.1</td><td>0.6</td><td>0.5</td></tr>
-            <tr data-se="dream-daedal"><th scope="row">Dream + DAEDAL</th><td>2.7</td><td>2.2</td><td>1.2</td><td>0.6</td><td>0.5</td></tr>
-            <tr data-se="dream-dystruct"><th scope="row">Dream + DyStruct</th><td>3.9</td><td>2.1</td><td>1.9</td><td>0.6</td><td>0.5</td></tr>
-          </tbody></table></div>
-        </div></details>
     <details class="ablation-details"><summary>Component ablations</summary><p>Replacing the scheduler with fixed left-to-right block order lowers LLaDA MATH by 1.1 percentage points. Removing boundary repair lowers HumanEval by 1.9 percentage points.</p><div class="table-scroll" role="region" aria-label="Component ablations; scroll on narrow screens" tabindex="0"><table id="ablations"><caption>Component ablations on LLaDA-8B-Base. Scores (%).</caption><thead><tr><th scope="col">Configuration</th><th scope="col">HumanEval</th><th scope="col">MBPP</th><th scope="col">GSM8K</th><th scope="col">MATH</th><th scope="col">BBH</th></tr></thead><tbody>
           <tr class="ours" data-ablation="full"><th scope="row">Full DyStruct</th><td>34.8</td><td>41.4</td><td>72.1</td><td>31.4</td><td>49.3</td></tr>
           <tr data-ablation="schedule"><th scope="row">Fixed left-to-right block order</th><td>33.5</td><td>41.2</td><td>71.8</td><td>30.3</td><td>49.3</td></tr>
