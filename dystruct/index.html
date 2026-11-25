@@ -33,25 +33,22 @@
 <body>
 <a class="skip-link" href="#main">Skip to research</a>
 <header class="publication container" id="top">
-  <p class="venue">NeurIPS 2026</p>
   <h1><span>DyStruct:</span> Dynamically Structured Diffusion Language Model Decoding via Bayesian Inference</h1>
   <p class="authors">Bian Sun<span aria-label="equal contribution">*</span>, Kevin Zhai<span aria-label="equal contribution">*</span>, Mubarak Shah, Zhenyi Wang</p>
   <p class="affiliation">University of Central Florida</p>
   <p class="contribution">* Equal contribution</p>
   <div class="resource-links"><a class="button primary" href="https://arxiv.org/pdf/2605.09820"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M5 2h6l4 4v12H5zM11 2v5h4M8 10h4M8 13h4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Paper</a><a class="button primary" href="https://arxiv.org/abs/2605.09820">arXiv</a></div>
-  <p class="publication-summary">Adapt response length and token blocks during generation,<br class="desktop-break"> with a frozen diffusion language model.</p>
 </header>
 <main id="main">
   <figure class="teaser container"><div class="figure-content" id="growth-figure"><img src="assets/stage-expand.svg" width="932" height="196" alt="For a water-cycle summary, the decoder extends the response through successive masked windows after already decoded text."></div><figcaption><strong>A response that grows during decoding.</strong> Pink regions are newly appended masked windows; green regions contain text already decoded.</figcaption><button class="image-action" type="button" data-enlarge="growth-figure" hidden>Enlarge figure</button></figure>
   <section class="section reading" aria-labelledby="question-title">
-    <h2 id="question-title">Why length and block structure must adapt together</h2>
+    <h2 id="question-title">How should a diffusion language model group and decode tokens as its response grows?</h2>
     <p>Diffusion language models refine masked token positions in parallel. Many decoders fix the response length in advance: short windows can truncate an answer, while long windows allocate unnecessary positions.</p>
     <p>Appending new positions also creates a structural problem. The decoder needs to group them into contiguous blocks, choose a decoding order, and reconcile neighboring block boundaries.</p>
-    <p class="research-question"><strong>Research question</strong>How can a frozen diffusion LM adapt response length, token blocks, and decoding order together?</p>
   </section>
   <section class="section container method" id="method" aria-labelledby="method-title">
     <h2 id="method-title">How DyStruct decodes a growing response</h2>
-    <p class="section-lead">The overview retains the complete token trace. Select a stage for a larger view of that part of the method. A window is a newly appended region of masked positions; a block is a contiguous subset of that window.</p>
+    <p class="section-lead">A window is a newly appended region of masked positions; a block is a contiguous subset of that window.</p>
     <div class="stage-tabs" role="tablist" aria-label="Method stages" hidden>
       <button type="button" role="tab" id="tab-overview" aria-controls="panel-overview" aria-selected="true">Overview</button>
       <button type="button" role="tab" id="tab-expand" aria-controls="panel-expand" aria-selected="false" tabindex="-1">Expand</button>
@@ -65,12 +62,12 @@
       <article class="stage" id="panel-schedule"><h3>Use stable blocks as decoded context</h3><p>The scheduler prioritizes lower-instability blocks with decoded neighbors. More unstable blocks receive additional refinement. Here, the outer blocks are resolved before the middle block.</p><figure><div class="figure-content scheduling" id="schedule-figure"><img src="assets/stage-schedule.svg" width="693" height="219" loading="lazy" alt="The original refinement trace decodes block one, then block three, then the middle block."></div><figcaption>Stable text on both sides helps constrain the remaining masked block.</figcaption><button class="image-action" type="button" data-enlarge="schedule-figure" hidden>Enlarge figure</button></figure></article>
       <article class="stage" id="panel-repair"><h3>Reconcile neighboring block boundaries</h3><p>Low-confidence tokens near a block interface are remasked and refined using the neighboring decoded text. Positions outside the repair interval stay fixed. Expansion repeats until end-of-sequence or the length cap.</p><figure><div class="figure-content repair" id="repair-figure"><img src="assets/stage-repair.svg" width="676" height="166" loading="lazy" alt="The original before, remask, and after trace repairs selected neighboring block-interface positions."></div><figcaption>Boundary repair revisits local inconsistencies after block decoding.</figcaption><button class="image-action" type="button" data-enlarge="repair-figure" hidden>Enlarge figure</button></figure></article>
     </div>
-    <div class="math-explanation reading"><h3>Local evidence, structured inference</h3><p>For a given window length, block partitioning combines diagnostic observations with a prior over contiguous partitions. In simplified conditional notation:</p><figure class="equation"><img src="assets/partition-posterior.svg" width="627" height="40" loading="lazy" alt="The posterior probability of partition P given observations O, length L, and split parameters alpha is proportional to the observation likelihood given P times the partition prior given L and alpha."><figcaption><span><strong>P</strong>: block partition</span><span><strong>O</strong>: diagnostic observations</span><span><strong>L</strong>: window length</span><span><strong>α</strong>: split-prior parameters</span></figcaption></figure><p>The full framework also models window growth and block scheduling; the paper gives the complete factorization and staged inference procedure.</p></div>
+    <div class="math-explanation reading"><h3>Local evidence, structured inference</h3><p>Conditioned on the window length, the block posterior combines diagnostic observations with a prior over contiguous partitions:</p><figure class="equation"><img src="assets/partition-posterior.svg" width="627" height="40" loading="lazy" alt="The posterior probability of partition P given observations O, length L, and split parameters alpha is proportional to the observation likelihood given P times the partition prior given L and alpha."><figcaption><span><strong>P</strong>: block partition</span><span><strong>O</strong>: diagnostic observations</span><span><strong>L</strong>: window length</span><span><strong>α</strong>: split-prior parameters</span></figcaption></figure></div>
   </section>
   <section class="section container results-section" id="results" aria-labelledby="results-title">
     <h2 id="results-title">Results</h2><p class="section-lead">DyStruct improves the Base decoder on all five evaluated benchmarks with both LLaDA-8B-Base and Dream-7B-Base.</p>
     <div class="headline-results"><p><strong>+4.4 <span>percentage points</span></strong>LLaDA BBH · 44.9 Base to 49.3 DyStruct</p><p><strong>+6.8 <span>percentage points</span></strong>Dream HumanEval · 40.2 Base to 47.0 DyStruct</p></div>
-    <p class="table-hint">Scroll horizontally to view all benchmarks.</p><div class="table-scroll" role="region" aria-label="Main benchmark results; scroll on narrow screens" tabindex="0"><table id="main-results"><caption>Benchmark scores (%). Higher is better.</caption><thead><tr><th scope="col">Backbone / decoder</th><th scope="col">HumanEval</th><th scope="col">MBPP</th><th scope="col">GSM8K</th><th scope="col">MATH</th><th scope="col">BBH</th></tr></thead><tbody>
+    <div class="table-scroll" role="region" aria-label="Main benchmark results; scroll on narrow screens" tabindex="0"><table id="main-results"><caption>Benchmark scores (%). Higher is better.</caption><thead><tr><th scope="col">Backbone / decoder</th><th scope="col">HumanEval</th><th scope="col">MBPP</th><th scope="col">GSM8K</th><th scope="col">MATH</th><th scope="col">BBH</th></tr></thead><tbody>
             <tr class="backbone"><th colspan="6" scope="rowgroup"><span>LLaDA-8B-Base</span></th></tr>
             <tr data-result="llada-base"><th scope="row">Base</th><td>32.3</td><td>39.8</td><td>70.3</td><td>30.5</td><td>44.9</td></tr>
             <tr data-result="llada-daedal"><th scope="row">+ DAEDAL</th><td>33.5</td><td>40.2</td><td>70.8</td><td>31.2</td><td>43.7</td></tr>
@@ -83,9 +80,9 @@
           </tbody></table></div>
     <details class="evaluation-details"><summary>Evaluation settings and uncertainty</summary><div>
           <p>HumanEval and MBPP report greedy pass@1; GSM8K and MATH use strict match; BBH uses exact match. The few-shot counts, in that order, are 0, 3, 5, 4, and 3.</p>
-          <p>The maximum generation length and base unmasking-iteration budget are both 256. DyStruct allocates refinement across adaptively sized blocks; a shared base budget does not establish matched total FLOPs. Experiments use a single NVIDIA H100 GPU.</p>
-          <p>The table shows point estimates. Standard errors are reproduced below from the paper; they are not confidence intervals or significance labels.</p>
-          <p class="table-hint">Scroll horizontally to view all benchmarks.</p><div class="table-scroll" role="region" aria-label="Reported standard errors" tabindex="0"><table id="standard-errors"><caption>Reported standard errors, in score percentage points</caption><thead><tr><th scope="col">Backbone / decoder</th><th scope="col">HumanEval</th><th scope="col">MBPP</th><th scope="col">GSM8K</th><th scope="col">MATH</th><th scope="col">BBH</th></tr></thead><tbody>
+          <p>Generation is capped at 256 tokens with a base budget of 256 unmasking iterations. Experiments use a single NVIDIA H100 GPU.</p>
+          <p>Backbone weights remain frozen. Diagnostic coefficients are calibrated on validation trajectories with ground-truth sequences.</p>
+          <div class="table-scroll" role="region" aria-label="Reported standard errors" tabindex="0"><table id="standard-errors"><caption>Reported standard errors, in score percentage points</caption><thead><tr><th scope="col">Backbone / decoder</th><th scope="col">HumanEval</th><th scope="col">MBPP</th><th scope="col">GSM8K</th><th scope="col">MATH</th><th scope="col">BBH</th></tr></thead><tbody>
             <tr data-se="llada-base"><th scope="row">LLaDA Base</th><td>3.6</td><td>2.1</td><td>1.2</td><td>0.6</td><td>0.5</td></tr>
             <tr data-se="llada-daedal"><th scope="row">LLaDA + DAEDAL</th><td>3.7</td><td>2.1</td><td>1.2</td><td>0.6</td><td>0.5</td></tr>
             <tr data-se="llada-dystruct"><th scope="row">LLaDA + DyStruct</th><td>3.7</td><td>2.2</td><td>1.2</td><td>0.6</td><td>0.5</td></tr>
@@ -94,22 +91,20 @@
             <tr data-se="dream-dystruct"><th scope="row">Dream + DyStruct</th><td>3.9</td><td>2.1</td><td>1.9</td><td>0.6</td><td>0.5</td></tr>
           </tbody></table></div>
         </div></details>
-    <details class="ablation-details"><summary>Component ablations</summary><p>Replacing the scheduler with fixed left-to-right block order lowers LLaDA MATH by 1.1 percentage points. Removing boundary repair lowers HumanEval by 1.9 percentage points.</p><p class="table-hint">Scroll horizontally to view all benchmarks.</p><div class="table-scroll" role="region" aria-label="Component ablations; scroll on narrow screens" tabindex="0"><table id="ablations"><caption>Component ablations on LLaDA-8B-Base. Scores (%).</caption><thead><tr><th scope="col">Configuration</th><th scope="col">HumanEval</th><th scope="col">MBPP</th><th scope="col">GSM8K</th><th scope="col">MATH</th><th scope="col">BBH</th></tr></thead><tbody>
+    <details class="ablation-details"><summary>Component ablations</summary><p>Replacing the scheduler with fixed left-to-right block order lowers LLaDA MATH by 1.1 percentage points. Removing boundary repair lowers HumanEval by 1.9 percentage points.</p><div class="table-scroll" role="region" aria-label="Component ablations; scroll on narrow screens" tabindex="0"><table id="ablations"><caption>Component ablations on LLaDA-8B-Base. Scores (%).</caption><thead><tr><th scope="col">Configuration</th><th scope="col">HumanEval</th><th scope="col">MBPP</th><th scope="col">GSM8K</th><th scope="col">MATH</th><th scope="col">BBH</th></tr></thead><tbody>
           <tr class="ours" data-ablation="full"><th scope="row">Full DyStruct</th><td>34.8</td><td>41.4</td><td>72.1</td><td>31.4</td><td>49.3</td></tr>
           <tr data-ablation="schedule"><th scope="row">Fixed left-to-right block order</th><td>33.5</td><td>41.2</td><td>71.8</td><td>30.3</td><td>49.3</td></tr>
           <tr data-ablation="repair"><th scope="row">Without boundary repair</th><td>32.9</td><td>40.8</td><td>70.5</td><td>31.2</td><td>49.1</td></tr>
           <tr data-ablation="both"><th scope="row">Without both</th><td>32.9</td><td>41.0</td><td>69.7</td><td>31.0</td><td>49.1</td></tr>
         </tbody></table></div></details>
-    <p class="scope"><strong>Evaluation scope.</strong> The evidence covers two backbones and five benchmarks under a 256-token output cap. Backbone weights remain frozen, while diagnostic coefficients are calibrated using validation trajectories with ground-truth sequences. A shared base iteration budget does not establish matched total FLOPs.</p>
   </section>
   <section class="section reading" id="example" aria-labelledby="example-title">
-      <p class="eyebrow">A concrete boundary error</p><h2 id="example-title">Repair a code expression using its context</h2>
-      <p>The paper’s HumanEval example asks whether two entries in <code>numbers</code> have an absolute difference below a threshold. The surrounding code indexes the array with <code>i</code> and <code>j</code>:</p>
+      <h2 id="example-title">Repair a code expression using its context</h2>
+      <p>In this HumanEval example, the task is to determine whether two entries in <code>numbers</code> have an absolute difference below a threshold. The surrounding code indexes the array with <code>i</code> and <code>j</code>:</p>
       <pre class="code-context"><code>def check_diff(numbers, threshold):
     for i in range(len(numbers)):
         for j in range(i + 1, len(numbers)):</code></pre>
       <div class="code-comparison"><div><h3>Before boundary repair</h3><pre><code>(x - y)</code></pre><p>The independently decoded expression uses variables that do not match the shown context.</p></div><div><h3>After boundary repair</h3><pre><code>(numbers[i] - numbers[j])</code></pre><p>Local re-evaluation recovers an expression consistent with the surrounding array indices.</p></div></div>
-      <p class="example-note">Qualitative trace excerpt from the paper. The snippets show the loop context and difference expression, not a complete executable function or a new baseline evaluation.</p>
     </section>
   <section class="section citation reading" id="citation" aria-labelledby="citation-title"><div class="citation-heading"><h2 id="citation-title">Cite DyStruct</h2><button class="button secondary copy-button" id="copy-citation" type="button" hidden>Copy BibTeX</button></div><pre><code id="bibtex">@misc{sun2026dystruct,
   title={DyStruct: Dynamically Structured Diffusion Language
@@ -121,10 +116,9 @@
   archivePrefix={arXiv},
   primaryClass={cs.LG},
   url={https://arxiv.org/abs/2605.09820}
-}</code></pre><p class="copy-status" id="copy-status" role="status" aria-live="polite"></p><a href="https://arxiv.org/abs/2605.09820">View the paper and publication record</a></section>
+}</code></pre><p class="copy-status" id="copy-status" role="status" aria-live="polite"></p></section>
 </main>
 <footer class="footer reading"><div class="footer-logos"><img src="assets/ucf-iai.png" width="950" height="240" alt="University of Central Florida, Institute of Artificial Intelligence"><img src="assets/neurips.svg" width="360" height="161" alt="Neural Information Processing Systems"></div><p>DyStruct · University of Central Florida · NeurIPS 2026</p></footer>
-<dialog id="figure-dialog" aria-labelledby="figure-dialog-title"><div class="dialog-heading"><h2 id="figure-dialog-title">Figure from the paper</h2><button class="button secondary" id="close-figure" type="button">Close</button></div><p class="dialog-help">Scroll to inspect the figure. Press Escape to close.</p><div class="zoom-viewport"><div id="zoom-content"></div></div></dialog>
+<dialog id="figure-dialog" aria-labelledby="figure-dialog-title"><div class="dialog-heading"><h2 id="figure-dialog-title">Method</h2><button class="button secondary" id="close-figure" type="button">Close</button></div><div class="zoom-viewport"><div id="zoom-content"></div></div></dialog>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ScholarlyArticle","name":"DyStruct: Dynamically Structured Diffusion Language Model Decoding via Bayesian Inference","url":"https://k-zhai.github.io/dystruct/","sameAs":"https://arxiv.org/abs/2605.09820","datePublished":"2026","author":[{"@type":"Person","name":"Bian Sun"},{"@type":"Person","name":"Kevin Zhai"},{"@type":"Person","name":"Mubarak Shah"},{"@type":"Person","name":"Zhenyi Wang"}]}</script>
 </body></html>
-
